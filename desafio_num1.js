@@ -7,7 +7,7 @@ class ProductManager {
 
     //Terminar el add product
 
-    addProduct(title, description, price, thumbnail, stock) {
+    addProduct(code, title, description, price, thumbnail, stock) {
         //Esto es para generar en id del producto auto generable en crecimiento
         const product_id = this.products.length + 1;
         //Esta constante es para conseguir los id ya colocados en los productos y compararlos con el id autogenerable
@@ -17,7 +17,8 @@ class ProductManager {
 
         if (!findProduct) {
             const prod = {
-                code: product_id,
+                id: product_id,
+                code: code,
                 title,
                 description,
                 price,
@@ -36,7 +37,8 @@ class ProductManager {
     }
 
     getProductsById(product_id) {
-        const findProduct = this.products.find((product) => product.code === product_id)
+        //
+        const findProduct = this.products.find((product) => product.id === product_id)
 
         if (!findProduct) {
             console.log("Not found")
@@ -52,7 +54,7 @@ const productManager = new ProductManager()
 
 //Agregar productos
 
-productManager.addProduct("Jamon", "Fiambre de cerdo", 54, "saraza", 21);
+productManager.addProduct(2123,"Jamon", "Fiambre de cerdo", 54, "saraza", 21);
 // productManager.addProduct("Jamon", "Fiambre de cerdo", 54, "saraza", 22);
 // productManager.addProduct("Jamon", "Fiambre de cerdo", 54, "saraza", 23);
 // productManager.addProduct("Jamon", "Fiambre de cerdo", 54, "saraza", 24);
