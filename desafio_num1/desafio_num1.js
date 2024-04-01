@@ -18,7 +18,7 @@ class ProductManager {
         if (!findProduct) {
             const prod = {
                 id: product_id,
-                code: code,
+                code,
                 title,
                 description,
                 price,
