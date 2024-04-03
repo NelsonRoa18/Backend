@@ -14,7 +14,7 @@ class ProductManager {
             //Genero el id autogenerable con el largo del array
             const product_id = products.length + 1;
             //Metodo para buscar 
-            const findProduct = products.find((product) => product.code === product_id);
+            const findProduct = products.find((product) => product.id === product_id);
 
             if (!findProduct) {
                 const prod = {
