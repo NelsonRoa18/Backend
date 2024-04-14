@@ -4,7 +4,7 @@ const fs = require('fs').promises
 class ProductManager {
 
     constructor() {
-        this.usersFile = "Products.json"
+        this.path = "Products.json"
     }
 
     async addProduct(title, description, price, thumbnail, code, stock) {
@@ -29,7 +29,7 @@ class ProductManager {
                 //Agregamos el item nuevo en el listado
                 products.push(prod);
                 //Escribimos en el archivo nuevamente
-                await fs.writeFile(this.usersFile, JSON.stringify(products, null, 2))
+                await fs.writeFile(this.path, JSON.stringify(products, null, 2))
 
             } else {
                 console.log("Error producto ya creado")
@@ -44,7 +44,7 @@ class ProductManager {
         //Metodo para obtener todos los productos
         try {
             //Leo el archivo
-            const data = await fs.readFile(this.usersFile, 'utf-8')
+            const data = await fs.readFile(this.path, 'utf-8')
             //Tengo que transformar lo que me devuelve (texto) en un objeto
             return JSON.parse(data)
         } catch (error) {
@@ -98,7 +98,7 @@ class ProductManager {
                 const productUpdate = JSON.stringify(products, null, 2)
                 
                 //Los escribo nuevamente en mi JSON
-                await fs.writeFile(this.usersFile, productUpdate);
+                await fs.writeFile(this.path, productUpdate);
             }
         } catch (error) {
             console.error("Error al actualizar el producto", error);
@@ -120,7 +120,7 @@ class ProductManager {
                 //Guardo el listado modificado, lo transformo en JSON
                 const productsUpdate = JSON.stringify(products, null, 2)
                 //Escribo nuevamente en mi archivo JSON
-                await fs.writeFile(this.usersFile, productsUpdate)
+                await fs.writeFile(this.path, productsUpdate)
                 console.log("Elemento borrado con exito")
             }
         } catch (error) {
@@ -133,18 +133,18 @@ class ProductManager {
 //Creamos una nueva intancia de la clase
 const product = new ProductManager()
 
-/* product.getProducts()
+product.getProducts()
     .then(products => console.log('Productos', products))
     .catch(error => console.log('El error es ', error)) 
- */
+
 
 //product.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25)
 
 /* product.getProducts()
     .then(products => console.log('Productos', products))
     .catch(error => console.log('El error es ', error)) 
+ */
 
-*/
 
 //product.getProductById(2);
 
