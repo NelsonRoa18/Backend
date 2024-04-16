@@ -11,11 +11,12 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.json())
 
+//Instancio mi nuevo objeto product
 const product = new productManager()
 
 app.get('/products', async (req, res) => {
     try {
-
+        //Traigo todos los productos desde mi json con el metodo getProducts()
         const products = await product.getProducts()
         //Obtengo el valor del parametro en la query, en este caso, "limit"
         const limit = parseInt(req.query.limit);
