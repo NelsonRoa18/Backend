@@ -13,8 +13,6 @@ app.use(express.json())
 
 const product = new productManager()
 
-//Aca adentro ponemos todo lo que nos devuelve el json de nuestros productos
-
 app.get('/products', async (req, res) => {
     try {
 
