@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "code": "abc123",
+    "title": "Queso",
+    "description": "Fiambre de vaca",
+    "price": 100,
+    "thumbnail": "pipumpam",
+    "stock": 15
+  },
+  {
+    "id": 2,
+    "code": "abc456",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 200,
+    "thumbnail": "Sin imagen",
+    "stock": 25
+  },
+  {
+    "id": 3,
+    "code": "abc789",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 300,
+    "thumbnail": "Sin imagen",
+    "stock": 30
+  },
+  {
+    "id": 4,
+    "code": "def123",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 100,
+    "thumbnail": "Sin imagen",
+    "stock": 15
+  },
+  {
+    "id": 5,
+    "code": "def456",
+    "title": "Queso",
+    "description": "Fiambre de vaca",
+    "price": 50,
+    "thumbnail": "pipumpam",
+    "stock": 5
+  },
+  {
+    "id": 6,
+    "code": "def789",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 400,
+    "thumbnail": "Sin imagen",
+    "stock": 40
+  },
+  {
+    "id": 7,
+    "code": "abc789",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 500,
+    "thumbnail": "Sin imagen",
+    "stock": 50
+  },
+  {
+    "id": 8,
+    "code": "ghi123",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 600,
+    "thumbnail": "Sin imagen",
+    "stock": 60
+  },
+  {
+    "id": 9,
+    "code": "ghi789",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 700,
+    "thumbnail": "Sin imagen",
+    "stock": 70
+  },
+  {
+    "id": 10,
+    "code": "jkl123",
+    "title": "producto prueba",
+    "description": "Este es un producto prueba",
+    "price": 1000,
+    "thumbnail": "Sin imagen",
+    "stock": 100
+  }
+]
