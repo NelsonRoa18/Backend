@@ -116,7 +116,7 @@ class ProductManager {
                 console.log("Error ID no encontrado")
             }else{
                 //Borro de mi lista de productos el producto encontrado
-                products.pop(product);
+                products.pop(findProduct);
                 //Guardo el listado modificado, lo transformo en JSON
                 const productsUpdate = JSON.stringify(products, null, 2)
                 //Escribo nuevamente en mi archivo JSON
