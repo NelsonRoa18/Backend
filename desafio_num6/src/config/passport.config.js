@@ -33,7 +33,10 @@ const initializePassport = () => {
         }
     ))
 
+
+
     passport.serializeUser((user, done) => {
+        console.log(user);
         done(null, user._id)
     })
 
@@ -57,6 +60,22 @@ const initializePassport = () => {
         }
     }))
 
+    passport.use('restorepass', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
+        try {
+            console.log(password);
+            const user = await userService.findOne({ email: username })
+            if (!user) {
+                console.log("El usuario no existe")
+                return done(null, false)
+            }
+            const newPassword = createHash(password)
+            console.log(newPassword);
+            const result = await userService.updateOne({ email: username }, { password: newPassword })
+            return done(null, user)
+        } catch (error) {
+            return done(error)
+        }
+    }))
 
     passport.use('github', new GitHubStrategy({
         clientID: "Iv23liBcPNc1h8AWysa0",

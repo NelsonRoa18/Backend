@@ -42,12 +42,28 @@ router.post('/logout', (req, res) => {
     });
 });
 
-router.get("/github", passport.authenticate("github",{scope:["user:email"]}),async(req,res)=>{})
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => { })
 
 
-router.get("/githubcallback",passport.authenticate("github",{failureRedirect:"/login"}),async(req,res)=>{
-    req.session.user=req.user
+router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), async (req, res) => {
+    req.session.user = req.user
     res.redirect("/")
+})
+
+
+router.post('/restorepass', passport.authenticate('restorepass', { failureRedirect: '/failrestore' }), async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).send({ status: "error", error: "Datos incompletos" });
+    try {
+        console.log(`Email: ${email}, Password: ${password}`);
+        res.redirect('/profile');
+    } catch (err) {
+        res.status(500).send('Error al cambiar contraseña');
+    }
+});
+
+router.get('/failrestore', (req, res) => {
+    res.send({ error: "Restauracion fallida" })
 })
 
 export default router;

@@ -15,4 +15,8 @@ router.get('/profile', isAuthenticated, (req, res) => {
     res.render('products', { user: req.session.user });
 });
 
+router.get('/restorepass', (req, res) => {
+    res.render('restorepass')
+})
+
 export default router;
