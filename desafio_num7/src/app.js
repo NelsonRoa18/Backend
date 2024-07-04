@@ -1,12 +1,13 @@
 import express from 'express';
 import session from 'express-session';
 
+import http from 'http';
 
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose'
+import path from 'path';
 import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
-import { Server } from 'socket.io'
 
 import productsRouter from './routes/products.router.js'
 import messagesRouter from './routes/message.router.js'
@@ -15,26 +16,19 @@ import cartRouter from './routes/carts.router.js'
 
 import sessionsRouter from './routes/api/sessions.js';
 import viewsRouter from './routes/views.routes.js';
-import ProductManager from './dao/class/ProductManager.js'
-import MessageManager from './dao/class/ChatManager.js'
-import CartManager from './dao/class/CartManager.js'
+
 import dotenv from 'dotenv';
 
 import passport from "passport";
 import initializePassport from './config/passport.config.js';
+import initializeSocket from './sockets.js';
 
 dotenv.config()
 console.log(process.env.MONGO_URL);
 
+
 const app = express()
 const PORT = 8080
-const httpServer = app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
-
-const socketServer = new Server(httpServer)
-
-const productManager = new ProductManager()
-const messageManager = new MessageManager()
-const cartManager = new CartManager()
 
 //Middleware para poder entender json en las solicitudes 
 app.use(express.json())
@@ -51,13 +45,13 @@ app.engine('handlebars', handlebars.engine({
 }));
 
 //Indicamos en que parte estaran las vistas
-app.set('views', __dirname + '/views')
+app.set('views',path.join(__dirname, './views') )
 
 //Indicamos que motor de plantillas se usara, 'view engine', 'handlebars'
 app.set('view engine', 'handlebars')
 
 //Seteamos de manera estatica nuestra carpeta
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => { console.log("Conectado a la base de datos") })
@@ -89,123 +83,6 @@ app.use('/', viewsRouter);
 
 //-------------------------------------------//
 
-let idProductToUpdate = ""
-socketServer.on('connection', socket => {
-    console.log("Nuevo cliente conectado");
+const httpServer = app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
 
-
-    messageManager.getChats()
-        .then(chats => {
-            socketServer.emit('mensaje', chats)
-        })
-
-    socket.on('addMensaje', data => {
-        console.log(data);
-        messageManager.addMessage(data)
-            .then(() => {
-                messageManager.getChats()
-                    .then(chats => {
-                        socketServer.emit('mensaje', chats)
-                    })
-            })
-    })
-
-    productManager.getProducts()
-        .then(products => {
-            console.log("enviando socket");
-            socketServer.emit('allProducts', products)
-            socketServer.emit('addProductsRealTime', products)
-        })
-
-    /*     socket.on('showCart', (data) => {
-            cartManager.getProductsToCart(data.email)
-            .then(productsCart => {
-                socketServer.emit('productsCart', productsCart)
-            })
-        }) */
-
-
-    socket.on('dataToPaginate', (dataToPaginate) => {
-        productManager.getProductsPaginate(dataToPaginate)
-            .then(products => {
-                console.log(products);
-                socketServer.emit('products', products)
-            })
-    })
-    socket.on('addProductToCart', (data) => {
-        console.log("Recibiendo producto para agregar al carrito");
-        cartManager.addProductToCart(data)
-            .then(() => {
-                console.log('Mostrando carrito');
-                productManager.getProductsPaginate()
-                    .then(products => {
-                        socketServer.emit('products', products)
-                    })
-            })
-
-    })
-
-    socket.on('addProduct', (data) => {
-        console.log("Recibiendo producto agregado");
-        productManager.addProduct(data)
-            .then(() => {
-                console.log("Solicitando mostrar productos");
-                productManager.getProducts()
-                    .then(products => {
-                        socketServer.emit('addProductsRealTime', products)
-                    })
-            })
-
-    })
-
-
-    socket.on('deleteProduct', (data) => {
-        productManager.deleteProduct(data)
-            .then(() => {
-                productManager.getProducts()
-                    .then((products) => {
-                        socketServer.emit('addProductsRealTime', products)
-                    })
-            })
-    })
-
-    socket.on('updateProductPage', (dataPage) => {
-        socketServer.emit('redirect', dataPage)
-        idProductToUpdate = dataPage.id
-    })
-
-    socket.on('addProductsRealTime', (dataPage) => {
-        socketServer.emit('redirect', dataPage)
-    })
-
-    socket.on('updateProduct', (data) => {
-        productManager.updateProduct(idProductToUpdate, data)
-            .then(() => {
-                productManager.getProducts()
-                    .then((products) => {
-                        socketServer.emit('addProductsRealTime', products)
-                    })
-            })
-    })
-
-    socket.on('deleteProductToCart', (data) => {
-        cartManager.deleteProductToCart(data)
-            .then(() => {
-                cartManager.getProductsToCart()
-                    .then(productsCart => {
-                        socketServer.emit('productsCart', productsCart)
-                    })
-            })
-    })
-
-    socket.on('emptyCart', (data) => {
-        cartManager.deleteAllProductsToCart(data)
-            .then(() => {
-                cartManager.getProductsToCart()
-                    .then(productsCart => {
-                        socketServer.emit('productsCart', productsCart)
-                    })
-            })
-    })
-})
-
+initializeSocket(httpServer);

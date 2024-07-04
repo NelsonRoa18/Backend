@@ -1,6 +1,8 @@
 
 socket = io()
 
+console.log("hola");
+
 const divProducts = document.getElementById('divProducts')
 const listProducts = document.getElementById('products');
 
