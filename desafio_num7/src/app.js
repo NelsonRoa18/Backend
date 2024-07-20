@@ -1,8 +1,6 @@
 import express from 'express';
 import session from 'express-session';
 
-import http from 'http';
-
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose'
 import path from 'path';

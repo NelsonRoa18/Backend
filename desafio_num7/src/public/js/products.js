@@ -1,7 +1,4 @@
-
 socket = io()
-
-console.log("hola");
 
 const divProducts = document.getElementById('divProducts')
 const listProducts = document.getElementById('products');
@@ -16,7 +13,7 @@ const btnAddCart = document.createElement('button');
 const btnAply = document.createElement('button');
 
 const btnShowCart = document.getElementById('cartId')
-
+const btnShowProfile = document.getElementById('profileId')
 
 const limit = document.getElementById('limit')
 const page = document.getElementById('page')
@@ -28,6 +25,12 @@ let divs = [limitDiv, pageDiv, queryDiv, sortDiv];
 const sorteo = ["asc", "desc"]
 
 const allCategorys = [];
+
+btnShowCart.addEventListener('click', () => {
+    const email = userEmail;
+    console.log('tocando boton del cart');
+    socket.emit('showCart',{url:'/carts', email:email})
+})
 
 sorteo.forEach(formToSort => {
     let option = document.createElement("option");
@@ -72,12 +75,6 @@ socket.on('allProducts', allProducts => {
 
     limit.value = 10;
     page.value = parseInt(allProducts.page);
-
-    btnShowCart.addEventListener('click', () => {
-        const email = userEmail;
-        socket.emit('showCart',{url:'/carts', email:email})
-    })
-
 
 })
 socket.on('products', products => {

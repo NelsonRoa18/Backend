@@ -6,14 +6,13 @@ const btnEmpty = document.createElement('button');
 
 
 function appendProduct(product) {
-    console.log(product);
     const newProduct = document.createElement('li')
     const btnDelete = document.createElement('button');
 
     btnDelete.innerHTML = "Borrar";
     btnDelete.addEventListener('click', () => {
         socket.emit('deleteProductToCart', product.productId._id)
-        console.log(product._id);
+        
     });
     newProduct.innerHTML = `<strong>Name: </strong>${product.productId.name}, <strong>Description: </strong>${product.productId.description},
     <strong>Price: </strong>${product.productId.price}, <strong>Category: </strong>${product.productId.category}, <strong>Available: </strong>${product.productId.available}`;
@@ -24,8 +23,6 @@ function appendProduct(product) {
 
 
 socket.on('productsCart', products => {
-
-    console.log(products);
 
     btnEmpty.innerHTML = "Vaciar Carrito";
     for (let product = 0; product < products.length; product++) {
@@ -41,7 +38,6 @@ socket.on('productsCart', products => {
 
         product.products.forEach(element => {
             const {productId, _id} = element
-            console.log();
             appendProduct(element);
         });
         

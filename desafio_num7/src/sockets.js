@@ -13,8 +13,6 @@ export default function initializeSocket(httpServer){
 
     const socketServer = new Server(httpServer)
 
-    console.log("dentro de initialize");
-
     let idProductToUpdate = ""
 
     socketServer.on('connection', socket => {
@@ -50,6 +48,12 @@ export default function initializeSocket(httpServer){
                 socketServer.emit('productsCart', productsCart)
             })
     
+        socket.on('showCart', (data) => {
+            cartManager.getProductsToCart(data.email)
+            .then(productsCart => {
+                socketServer.emit('productsCart', productsCart)
+            })
+        })
         socket.on('dataToPaginate', (dataToPaginate) => {
             productManager.getProductsPaginate(dataToPaginate)
                 .then(products => {
@@ -133,10 +137,6 @@ export default function initializeSocket(httpServer){
             })
         })
     })
-    
-    
-    
-    
-    
+
     
 }

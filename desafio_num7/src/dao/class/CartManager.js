@@ -31,7 +31,6 @@ class CartManager {
                 user.cart.push({ cartId: newCart._id })
                 const resultUser = await userModel.updateOne({ _id: user._id }, user)
                 const resultCarts = await cartsModel.updateOne({ _id: newCart._id }, newCart)
-                console.log(resultCarts);
                 //Retorno el result para que finalice la funcion           
                 return resultCarts
             } else {
@@ -61,7 +60,7 @@ class CartManager {
                 user.cart.push({ cartId: newCart._id })
                 const resultUser = await userModel.updateOne({ _id: user._id }, user)
                 const resultCarts = await cartsModel.updateOne({ _id: newCart._id }, newCart)
-                console.log(resultCarts);
+
                 //Retorno el result para que finalice la funcion           
                 return resultCarts
             }
