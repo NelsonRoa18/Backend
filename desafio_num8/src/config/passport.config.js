@@ -4,6 +4,10 @@ import userService from '../dao/models/user.model.js'
 import { createHash, isValidPassword } from '../utils.js';
 import GitHubStrategy from 'passport-github2'
 
+import CustomError from "../services/Customerror.js";
+import EErrors from "../services/enum.js";
+import { generateUserErrorInfo } from "../services/info.js";
+
 const LocalStrategy = local.Strategy
 
 const initializePassport = () => {
@@ -13,24 +17,35 @@ const initializePassport = () => {
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
             const { first_name, last_name, email, age } = req.body
             try {
-                let user = await userService.findOne({ email: username })
-                let cart = []
-                if (user) {
-                    console.log("El usuario ya existe")
-                    return done(null, false)
+                if (!first_name || !last_name || !email || !age) {
+                    CustomError.createError({
+                        name: "Creacion de usuario",
+                        cause: generateUserErrorInfo({ first_name, last_name, email, age }),
+                        message: "Error al intentar crear un usuario",
+                        code: EErrors.INVALID_TYPES_ERROR
+                    })
                 }
-                const newUser = {
-                    first_name,
-                    last_name,
-                    email,
-                    age,
-                    password: createHash(password),
-                    cart
+                else {
+                    let user = await userService.findOne({ email: username })
+                    let cart = []
+                    if (user) {
+                        console.log("El usuario ya existe")
+                        return done(null, false)
+                    }
+                    const newUser = {
+                        first_name,
+                        last_name,
+                        email,
+                        age,
+                        password: createHash(password),
+                        cart
+                    }
+                    let result = await userService.create(newUser)
+                    return done(null, result)
                 }
-                let result = await userService.create(newUser)
-                return done(null, result)
+
             } catch (error) {
-                return done("Error al obtener el usuario" + error)
+                return done(error)
             }
         }
     ))
@@ -94,7 +109,7 @@ const initializePassport = () => {
                     age: 20,
                     email: profile._json.email,
                     password: "",
-                    cart:[]
+                    cart: []
                 }
                 let result = await userService.create(newUser)
                 done(null, result)

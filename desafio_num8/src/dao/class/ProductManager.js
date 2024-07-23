@@ -1,4 +1,7 @@
 import productModel from '../models/products.model.js';
+import CustomError from "../../services/Customerror.js";
+import EErrors from "../../services/enum.js";
+import { generateProductErrorInfo } from "../../services/info.js";
 
 class ProductManager {
     constructor() {
@@ -81,6 +84,13 @@ class ProductManager {
             //Consulto que esten todos los datos cargados
             if (!name || !description || !price || !category || !available) {
                 console.log({ status: "error", error: "Faltan parametros" })
+                CustomError.createError({
+                    name: "Creacion de producto",
+                    cause: generateProductErrorInfo({ name, description, price, category, available }),
+                    message: "Error al intentar crear un product",
+                    code: EErrors.INVALID_TYPES_ERROR
+                })
+                return;
             }
             //Uso el metodo create para agregar cada uno de los campos de la collection
             let result = await productModel.create({ name, description, price, category, available })
@@ -90,6 +100,7 @@ class ProductManager {
         }
         catch (error) {
             console.error("Error al crear producto", error);
+            return error
         }
     }
 

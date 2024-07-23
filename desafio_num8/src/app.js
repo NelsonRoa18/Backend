@@ -18,9 +18,11 @@ import viewsRouter from './routes/views.routes.js';
 
 import dotenv from 'dotenv';
 
-import passport from "passport";
+import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import initializeSocket from './sockets.js';
+
+import errorHandler from './middleware/errors.js'
 
 dotenv.config()
 console.log(process.env.MONGO_URL);
@@ -77,8 +79,10 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/api/sessions', sessionsRouter);
+app.use(errorHandler)
 app.use('/', viewsRouter);
 app.use('/mockingproducts', mockingproductsRouter )
+
 
 
 //-------------------------------------------//
